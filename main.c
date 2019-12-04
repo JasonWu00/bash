@@ -36,16 +36,15 @@ int main() {
       exit(0);
     }
     else {
-      int execute_return;
       fork();//child process will execvp and end, parent keeps running
       if (getppid() == parentPID) {
+        int execute_return;
         execute_return = execvp(output[0], output);
+        if(execute_return < 0) {
+          printf("Error encountered: %i (%s)\n", errno, strerror(errno));
+        }
+        exit(0);
       }
-      //printf("%i\n", execute_return);
-      if(execute_return < 0) {
-        printf("Error encountered: %i (%s)\n", errno, strerror(errno));
-      }
-      exit(0); //if user types in invalid command
     }
   }
 }

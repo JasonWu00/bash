@@ -2,17 +2,18 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
-#include "parse.c"
+#include "parse.h"
 
 int main() {
   printf("Opening shell.\n");
   printf("This shell can only take in up to 6 tokens in a single line.\n");
   printf("If you enter a nonexistent command, the shell will not execute it.\n");
+  printf("Type \"exit\" to close the shell.\n");
   char input[100];
   char ** output;
   int parentPID = getpid();
 
-  while (output[0] != "exit") {//as long as "exit" isn't entered
+  while (1) {//as long as "exit" isn't entered
     printf("\n");
     fgets(input, 100, stdin);
     char *position;

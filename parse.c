@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include "parse.h"
 
 char ** parse_args( char * line ) {
   char ** output = calloc(sizeof(char *), 6);

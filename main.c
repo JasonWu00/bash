@@ -27,13 +27,7 @@ int main() {
     char leave[5] = "exit";
 
     if (strstr(input, &cd) != NULL) {//inputted command has a "cd" in it
-      printf("Testing, you have entered \"cd\". I will add code later.\n");
-      //char ** directory = calloc(sizeof(char *), 6);
-      int counter = 1;
-      /*while (counter < 6) {
-        directory[counter] = output[counter];
-      }*/
-      //chdir(directory);
+      chdir(output[1]);
     }
     else if (strstr(input, &leave) != NULL) {
       printf("Exiting shell\n");

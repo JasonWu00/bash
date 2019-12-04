@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include <errno.h>
 #include "parse.h"
 
 int main() {
@@ -35,11 +36,16 @@ int main() {
       exit(0);
     }
     else {
+      int execute_return;
       fork();//child process will execvp and end, parent keeps running
       if (getppid() == parentPID) {
-        execvp(output[0], output);
-        exit(0); //in case execvp doesn't work out
+        execute_return = execvp(output[0], output);
       }
+      //printf("%i\n", execute_return);
+      if(execute_return < 0) {
+        printf("Error encountered: %i (%s)\n", errno, strerror(errno));
+      }
+      exit(0); //if user types in invalid command
     }
   }
 }

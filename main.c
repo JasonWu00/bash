@@ -24,6 +24,22 @@ int main() {
     }
     //gets input and replaces newline with null
 
+    if(strchr(input,';') != NULL) {
+      char *inptr = input;
+      char *indcmd;
+      char *commandArray[100];
+      int q = 0;
+      while((indcmd = strsep(inptr,";")) != NULL) {
+        printf("test\n");
+        commandArray[q] = indcmd;
+        q++;
+      }
+      for(int w = 0; w < q; w++) {
+        printf("%s\n",commandArray[w]);
+        return 0;
+      }
+    }
+
     char * pointer = &input;
     output = parse_args(pointer);
     char cd[3] = "cd";

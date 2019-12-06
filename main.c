@@ -24,15 +24,18 @@ int main() {
     }
     //gets input and replaces newline with null
 
-    if(strchr(input,';') != NULL) {
-      char *inptr = input;
+    char *inptr = input;//pointer to input string
+    char *commandArray[100];
+    if(strchr(input,';') != NULL) {//check if semicolon in input
       char *indcmd;
-      char *commandArray[100];
       int q = 0;
       while((indcmd = strsep(&inptr,";")) != NULL) {
         commandArray[q] = indcmd;
         q++;
       }
+    }
+    else {
+      commandArray[0] = inptr;
     }
 
     char * pointer = &input;
@@ -42,12 +45,12 @@ int main() {
     const char *cd_p = &cd;
     const char *leave_p = &leave;
 
-    if (strstr(input, cd_p) != NULL) {//inputted command has a "cd" in it
+    if (strstr(input, cd_p) != NULL) {//input command has a "cd" in it
       chdir(output[1]);
       printf("\nWISH > ");
     }
-    else if (strstr(input, leave_p) != NULL) {
-      printf("\nWISH > Exiting shell\n");
+    else if (strstr(input, leave_p) != NULL) {//input command is "exit"
+      printf("\nWISH > Exiting shell\nThank you for visiting! Come again soon!");
       exit(0);
     }
     else {

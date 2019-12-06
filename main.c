@@ -36,7 +36,7 @@ int main() {
       printf("\nWISH > ");
     }
     else if (strstr(input, leave_p) != NULL) {
-      printf("WISH > Exiting shell\n");
+      printf("\nWISH > Exiting shell\n");
       exit(0);
     }
     else {
@@ -46,11 +46,11 @@ int main() {
       }
       wait(NULL);
       if (getppid() == parentPID) {
-        int execute_return;
         printf("WISH > ");
+        int execute_return;
         execute_return = execvp(output[0], output);
         if (execute_return < 0) {
-          printf("WISH > Error encountered: %i (%s)\n", errno, strerror(errno));
+          printf("Error encountered: %i (%s)\n", errno, strerror(errno));
         }
         exit(0);
       }

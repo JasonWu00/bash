@@ -29,14 +29,9 @@ int main() {
       char *indcmd;
       char *commandArray[100];
       int q = 0;
-      while((indcmd = strsep(inptr,";")) != NULL) {
-        printf("test\n");
+      while((indcmd = strsep(&inptr,";")) != NULL) {
         commandArray[q] = indcmd;
         q++;
-      }
-      for(int w = 0; w < q; w++) {
-        printf("%s\n",commandArray[w]);
-        return 0;
       }
     }
 

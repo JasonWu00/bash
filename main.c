@@ -24,6 +24,7 @@ int main() {
     }
     //gets input and replaces newline with null
 
+    int numCommands;
     char *inptr = input;//pointer to input string
     char *commandArray[100];
     if(strchr(input,';') != NULL) {//check if semicolon in input
@@ -33,9 +34,11 @@ int main() {
         commandArray[q] = indcmd;
         q++;
       }
+      numCommands = q;
     }
     else {
       commandArray[0] = inptr;
+      numCommands = 1;
     }
 
     char * pointer = &input;
@@ -45,30 +48,35 @@ int main() {
     const char *cd_p = &cd;
     const char *leave_p = &leave;
 
-    if (strstr(input, cd_p) != NULL) {//input command has a "cd" in it
-      chdir(output[1]);
-      printf("\nWISH > ");
-    }
-    else if (strstr(input, leave_p) != NULL) {//input command is "exit"
-      printf("\nWISH > Exiting shell\nThank you for visiting! Come again soon!");
-      exit(0);
-    }
-    else {
-      fork();//child process will execvp and end, parent keeps running
-      if (getpid() == parentPID) {
-        printf("\n");
+    for(int q = 0; q < numCommands; q++) {//for every command entered
+
+      printf("q: %d, elementarr: %s\n", q, commandArray[q]);
+
+      if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
+        chdir(output[1]);
+        printf("\nWISH > ");
       }
-      wait(NULL);
-      if (getppid() == parentPID) {
-        printf("WISH > ");
-        int execute_return;
-        execute_return = execvp(output[0], output);
-        if (execute_return < 0) {
-          printf("Error encountered: %i (%s)\n", errno, strerror(errno));
-        }
+      else if (strstr(commandArray[q], leave_p) != NULL) {//input command is "exit"
+        printf("\nWISH > Exiting shell\nThank you for visiting! Come again soon!");
         exit(0);
       }
-      printf("\nWISH > ");
+      else {
+        fork();//child process will execvp and end, parent keeps running
+        if (getpid() == parentPID) {
+          printf("\n");
+        }
+        wait(NULL);
+        if (getppid() == parentPID) {
+          //printf("WISH > ");
+          int execute_return;
+          execute_return = execvp(output[0], output);
+          if (execute_return < 0) {
+            printf("Error encountered: %i (%s)\n", errno, strerror(errno));
+          }
+          exit(0);
+        }
+      }
     }
+    printf("\nWISH > ");
   }
 }

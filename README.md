@@ -9,4 +9,6 @@
 
 ### Bugs present in the shell
 
+* When running commands separated by a semicolon, an extra instance of "WISH >" may get in between the two executions of the commands.
+
 ### Function Headers

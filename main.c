@@ -41,8 +41,6 @@ int main() {
       numCommands = 1;
     }
 
-    char * pointer = &input;
-    output = parse_args(pointer);
     char cd[3] = "cd";
     char leave[5] = "exit";
     const char *cd_p = &cd;
@@ -50,7 +48,8 @@ int main() {
 
     for(int q = 0; q < numCommands; q++) {//for every command entered
 
-      printf("q: %d, elementarr: %s\n", q, commandArray[q]);
+	  char * pointer = &commandArray[q];
+      output = parse_args(pointer);
 
       if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
         chdir(output[1]);

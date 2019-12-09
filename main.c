@@ -26,13 +26,13 @@ void main() {
     char * second_cmd = &input;
 
     if (strchr(input, ';') == NULL) {//single command
-      printf("No semicolon found\n");
+      //printf("No semicolon found\n");
       output = parse_args(first_cmd);
       run_command(input, output);
     }
 
     else {//multiple commands separated by a ;
-      printf("1 or more semicolons found\n");
+      //printf("1 or more semicolons found\n");
       while (strchr(input, ';') != NULL) {
         //iterate thru input, take each section of of input divided by a ";"
         //and feeds it through run_command

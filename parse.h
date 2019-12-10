@@ -1,3 +1,8 @@
-char ** parse_args( char * line );
-char ** parse_args_semicolon( char * line );
-void run_command(char input[100], char ** output);
+struct parse_output{
+  char ** output; 
+  int lastToken;
+};
+
+struct parse_output parse_args( char * line, int * last_p);
+void run_cmds(char * commandArray[100], int numCommands);
+

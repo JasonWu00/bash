@@ -4,6 +4,9 @@
 #include <unistd.h>
 #include <errno.h>
 #include <sys/wait.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #include "parse.h"
 
 int main() {
@@ -43,16 +46,24 @@ int main() {
 
     char cd[3] = "cd";
     char leave[5] = "exit";
+    char lessthan[2] = "<";
+    char morethan[2] = ">";
+
     const char *cd_p = &cd;
     const char *leave_p = &leave;
+    const char *less_p = &lessthan;
+    const char *more_p = &morethan;
 
     for(int q = 0; q < numCommands; q++) {//for every command entered
 
 	  char * pointer = commandArray[q];
-      output = parse_args(pointer);
+      int last_token;
+      int * last_p = 0;
+      struct parse_output outstruct;
+      outstruct = parse_args(pointer, last_p);
 
       if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
-        chdir(output[1]);
+        chdir(outstruct.output[1]);
         printf("\nWISH > ");
       }
       else if (strstr(commandArray[q], leave_p) != NULL) {//input command is "exit"
@@ -60,6 +71,13 @@ int main() {
         exit(0);
       }
       else {
+        if (strstr(commandArray[q], less_p) != NULL) {
+          if (access(outstruct.output[outstruct.lastToken], F_OK) == -1) {//if not entered flname exists
+            //create a file
+            int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR | O_CREAT);
+          }
+          return 0;
+        }
         fork();//child process will execvp and end, parent keeps running
         if (getpid() == parentPID) {
           printf("\n");
@@ -68,7 +86,7 @@ int main() {
         if (getppid() == parentPID) {
           //printf("WISH > ");
           int execute_return;
-          execute_return = execvp(output[0], output);
+          execute_return = execvp(outstruct.output[0], outstruct.output);
           if (execute_return < 0) {
             printf("Error encountered: %i (%s)\n", errno, strerror(errno));
           }

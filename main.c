@@ -55,10 +55,11 @@ int main() {
     const char *more_p = &morethan;
     for(int q = 0; q < numCommands; q++) {//for every command entered
 	  char * pointer = commandArray[q];
-      int last_token;
-      int * last_p = 0;
+      int last_token = 0;
+      int * last_p = &last_token;
       struct parse_output outstruct;
       outstruct = parse_args(pointer, last_p);
+      printf("DEBUG: your cmd: %s, last_token: %i\n", commandArray[q], last_token);
       if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
         chdir(outstruct.output[1]);
         printf("\nWISH > ");

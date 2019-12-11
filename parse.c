@@ -16,7 +16,7 @@ struct parse_output parse_args( char * line, int * last_p) {
     output[counter] = strsep(&line, " ");
     counter++;
   }
-  *last_p = counter;
+  last_p = counter;
   output[19] = NULL;
 
   struct parse_output return_struct;

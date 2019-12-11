@@ -68,7 +68,7 @@ int main() {
         exit(0);
       }
       else {
-        if (strstr(commandArray[q], less_p) != NULL) {
+        if (strchr(commandArray[q], '>') != NULL) {
           if (access(outstruct.output[outstruct.lastToken], F_OK) == -1) {//if not entered flname exists
             //create a file
             int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR | O_CREAT);

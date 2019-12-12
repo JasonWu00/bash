@@ -27,6 +27,7 @@ int main() {
     }
     //gets input and replaces newline with null
 
+    //splits each individual command entered into commandArray
     int numCommands;
     char *inptr = input;//pointer to input string
     char *commandArray[100];
@@ -43,6 +44,11 @@ int main() {
       commandArray[0] = inptr;
       numCommands = 1;
     }
+    printf("%s\n",commandArray[0]);
+    /*
+    for(int w = 0; commandArray[w] != NULL; w++) {
+      printf("%s\n",commandArray[w]);
+    }*/
 
     char cd[3] = "cd";
     char leave[5] = "exit";
@@ -55,7 +61,7 @@ int main() {
     const char *more_p = &morethan;
     for(int q = 0; q < numCommands; q++) {//for every command entered
 	  char * pointer = commandArray[q];
-      int last_token = 0;
+      int last_token = q;
       int * last_p = &last_token;
       struct parse_output outstruct;
       outstruct = parse_args(pointer, last_p);

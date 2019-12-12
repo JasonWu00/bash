@@ -15,7 +15,7 @@ struct parse_output parse_args( char * line, int *last_p) {
   while (line != NULL) {
     output[counter] = strsep(&line, " ");
     printf("DEBUG: counter: %i\n", counter);
-    *last_p = counter;
+    last_p = counter;
     counter++;
   }
   output[19] = NULL;

@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include "parse.h"
 
-struct parse_output parse_args( char * line, int *last_p) {
+struct parse_output parse_args( char * line) {
   char ** output = calloc(sizeof(char *), 20);
   //printf("test\n");
   int counter = 0;
@@ -15,7 +15,6 @@ struct parse_output parse_args( char * line, int *last_p) {
   while (line != NULL) {
     output[counter] = strsep(&line, " ");
     printf("DEBUG: counter: %i\n", counter);
-    *last_p = counter;
     counter++;
   }
   output[19] = NULL;

@@ -54,12 +54,14 @@ int main() {
     const char *less_p = &lessthan;
     const char *more_p = &morethan;
     for(int q = 0; q < numCommands; q++) {//for every command entered
-	  char * pointer = commandArray[q];
-      int last_token = 0;
-      int * last_p = &last_token;
+
+	    char * pointer = commandArray[q];
       struct parse_output outstruct;
-      outstruct = parse_args(pointer, last_p);
-      printf("DEBUG: your cmd: %s, last_token: %i\n", commandArray[q], last_token);
+      outstruct = parse_args(pointer);
+      outstruct.lastToken--;
+
+      printf("DEBUG: your cmd: %s, last_token: %i\n", commandArray[q], outstruct.lastToken);
+      printf("Command has > sign: %i, 0 if DNE\n", strstr(outstruct.output[outstruct.lastToken-1], more_p) != NULL);
       if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
         chdir(outstruct.output[1]);
         printf("\nWISH > ");
@@ -68,14 +70,25 @@ int main() {
         printf("\nWISH > Exiting shell\nThank you for visiting! Come again soon!\n\n");
         exit(0);
       }
-      else {
-        if (strchr(commandArray[q], '>') != NULL) {
-          if (access(outstruct.output[outstruct.lastToken], F_OK) == -1) {//if not entered flname exists
-            //create a file
-            int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR | O_CREAT);
-          }
-          return 0;
+      else if (strstr(outstruct.output[outstruct.lastToken-1], more_p) != NULL) {
+        printf("DEBUG: value of last token: %s\n", outstruct.output[outstruct.lastToken]);
+        int fd_redirectedFile = open(outstruct.output[outstruct.lastToken], O_RDWR);//to see if file exists
+        if (fd_redirectedFile == -1) {//if no such file
+          //create a file
+          printf("DEBUG: file DNE\n");
+          printf("DEBUG: fd_redir has this value: %i\n", fd_redirectedFile);
+          fd_redirectedFile = open(outstruct.output[outstruct.lastToken], O_RDWR | O_CREAT);
+          //int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR | O_CREAT);
+          exit(0);
         }
+        else {//file exists
+          printf("DEBUG: file exists\n");
+          printf("DEBUG: fd_redir has this value: %i\n", fd_redirectedFile);
+          //int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR);
+          exit(0);
+        }
+      }
+      else {
         fork();//child process will execvp and end, parent keeps running
         if (getpid() == parentPID) {
           printf("\n");

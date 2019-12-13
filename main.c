@@ -82,7 +82,6 @@ int main() {
       //commented out printf that caused segfault
       if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
         chdir(outstruct.output[1]);
-        printf("\nWISH > ");
       }
 
       else if (strstr(commandArray[q], leave_p) != NULL) {//input command is "exit"

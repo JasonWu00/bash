@@ -67,11 +67,11 @@ int main() {
       int more_num = -1;
       for (int counter = 0; counter < outstruct.lastToken; counter++) {
         if (strcmp(outstruct.output[counter], "<") == 0) {
-          printf("Found a <\n");
+          //printf("Found a <\n");
           less_num = counter;
         }
         if (strcmp(outstruct.output[counter], ">") == 0) {
-          printf("Found a >\n");
+          //printf("Found a >\n");
           more_num = counter;
         }
       }
@@ -91,7 +91,7 @@ int main() {
       }
 
       else if (less_num != -1 || more_num != -1) {//has a ">" or a "<", conduct redirection
-        printf("DEBUG: value of last token: %s\n", outstruct.output[outstruct.lastToken]);
+        //printf("DEBUG: value of last token: %s\n", outstruct.output[outstruct.lastToken]);
 
         //strncat(outstruct.output[less_num], ".txt", 4);
         //strncat(outstruct.output[more_num], ".txt", 4);
@@ -100,13 +100,13 @@ int main() {
 
         if (less_num != -1) {
           fd_new_input = open(outstruct.output[less_num - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
-          printf("DEBUG: less_num: %s\n", outstruct.output[less_num]);
-          printf("DEBUG: opening %s file\n", outstruct.output[less_num - 1]);
+          //printf("DEBUG: less_num: %s\n", outstruct.output[less_num]);
+          //printf("DEBUG: opening %s file\n", outstruct.output[less_num - 1]);
         }
         if (more_num != -1) {
           fd_new_output = open(outstruct.output[more_num + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
-          printf("DEBUG: more_num: %s\n", outstruct.output[more_num]);
-          printf("DEBUG: opening %s file\n", outstruct.output[more_num + 1]);
+          //printf("DEBUG: more_num: %s\n", outstruct.output[more_num]);
+          //printf("DEBUG: opening %s file\n", outstruct.output[more_num + 1]);
         }
 
         int new_fd_stdout = dup(1);
@@ -124,11 +124,11 @@ int main() {
         }*/
         if (less_num != -1) {
           dup2(fd_new_input, 0);//replaces stdin with new input file
-          printf("stdin replaced\n");
+          //printf("stdin replaced\n");
         }
         if (more_num != -1) {
           dup2(fd_new_output, 1);//now with stdout
-          printf("stdout replaced\n");
+          //printf("stdout replaced\n");
         }
 
 
@@ -137,16 +137,16 @@ int main() {
         outstruct.output[less_num] = NULL;
         outstruct.output[more_num] = NULL;
 
-        printf("entire array:\n");
-        for (int counter = 0; counter <= outstruct.lastToken; counter++) {
+        //printf("entire array:\n");
+        /*for (int counter = 0; counter <= outstruct.lastToken; counter++) {
           printf("%s", outstruct.output[counter]);
           printf("\n");
-        }
+        }*/
 
         run_cmds(outstruct, parentPID);
         dup2(new_fd_stdin, 0);
         dup2(new_fd_stdout, 1);//undoes file table manipulation
-        printf("DEBUG: Redirection done\n");
+        printf("WISH > Redirection done\n");
       }
       else {
         run_cmds(outstruct, parentPID);

@@ -62,6 +62,10 @@ int main() {
       outstruct = parse_args(pointer);
       outstruct.lastToken--;
 
+<<<<<<< HEAD
+      //printf("DEBUG: your cmd: %s, last_token: %i\n", commandArray[q], outstruct.lastToken);
+      //printf("DEBUG: Command has > sign: %i, 0 if DNE\n", strstr(outstruct.output[outstruct.lastToken-1], more_p) != NULL);
+=======
       //get locations of < and > in the output char** array
       int less_num = -1;
       int more_num = -1;
@@ -80,6 +84,7 @@ int main() {
       //printf("DEBUG: your cmd: %s, last_token: %i\n", commandArray[q], outstruct.lastToken);
       //printf("Command has > sign: %i, 0 if DNE\n", strchr(outstruct.output, morethan) != NULL);
       //commented out printf that caused segfault
+>>>>>>> 043bfd901b3c6c4a25bae8acc006a39b432b75c8
       if (strstr(commandArray[q], cd_p) != NULL) {//input command has a "cd" in it
         chdir(outstruct.output[1]);
       }
@@ -88,6 +93,31 @@ int main() {
         printf("\nWISH > Exiting shell\nThank you for visiting! Come again soon!\n\n");
         exit(0);
       }
+<<<<<<< HEAD
+      else if (strstr(outstruct.output[outstruct.lastToken-1], more_p) != NULL) {//if second last token is >
+        //printf("DEBUG: value of last token: %s\n", outstruct.output[outstruct.lastToken]);
+        int fd_redirectedFile = open(outstruct.output[outstruct.lastToken], O_RDWR);//to see if file exists
+        if (fd_redirectedFile == -1) {//if no such file
+          //create a file
+          //printf("DEBUG: file DNE\n");
+          //printf("DEBUG: fd_redir has this value: %i\n", fd_redirectedFile);
+          fd_redirectedFile = open(outstruct.output[outstruct.lastToken], O_RDWR | O_CREAT);
+          //int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR | O_CREAT);
+          //exit(0);
+        }
+        else {//file exists
+          //printf("DEBUG: file exists\n");
+          //printf("DEBUG: fd_redir has this value: %i\n", fd_redirectedFile);
+          //int filedesc = open(outstruct.output[outstruct.lastToken],O_RDWR);
+          //exit(0);
+        }
+        dup2(1,fd_redirectedFile);
+      }
+      else {
+        fork();//child process will execvp and end, parent keeps running
+        if (getpid() == parentPID) {
+          printf("\n");
+=======
 
       else if (less_num != -1 || more_num != -1) {//has a ">" or a "<", conduct redirection
         //printf("DEBUG: value of last token: %s\n", outstruct.output[outstruct.lastToken]);
@@ -124,6 +154,7 @@ int main() {
         if (less_num != -1) {
           dup2(fd_new_input, 0);//replaces stdin with new input file
           //printf("stdin replaced\n");
+>>>>>>> 043bfd901b3c6c4a25bae8acc006a39b432b75c8
         }
         if (more_num != -1) {
           dup2(fd_new_output, 1);//now with stdout

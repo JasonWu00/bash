@@ -11,14 +11,17 @@
 
 int main() {
   umask(0);
+  int parentPID = getpid();
 
   printf("Opening shell.\n");
-  printf("This shell can only take in up to 6 tokens in a single line.\n");
-  printf("If you enter a nonexistent command, the shell will not execute it.\n");
-  printf("Type \"exit\" to close the shell.\n");
+  printf("\n===========================\n");
+  printf("\nWindows Shell v0.0.1, by Julian Wong and Jason Wu.\n");
+  printf("\n===========================\n\n");
+  printf("Notes:\n");
+  printf("If you enter a nonexistent command, the shell will return an error message.\n");
+  printf("Type \"exit\" to close the shell.\n\n");
   char input[100];
   char ** output;
-  int parentPID = getpid();
   printf("WISH > ");
 
   while (1) {//as long as "exit" isn't entered

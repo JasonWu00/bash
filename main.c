@@ -35,7 +35,7 @@ int main() {
     if(strchr(input,';') != NULL) {//check if semicolon in input
       char *indcmd;
       int q = 0;
-      while((indcmd = strsep(&inptr,";")) != NULL) {
+      while((indcmd = strsep(&inptr,";")) != NULL) {  
         commandArray[q] = indcmd;
         q++;
       }
@@ -50,11 +50,13 @@ int main() {
     char leave[5] = "exit";
     char lessthan = "<";
     char morethan = ">";
+    char pipe = "|";
 
     const char *cd_p = &cd;
     const char *leave_p = &leave;
     const char *less_p = &lessthan;
     const char *more_p = &morethan;
+    const char *pipe_p = &pipe;
     for(int q = 0; q < numCommands; q++) {//for every command entered
 
 	    char * pointer = commandArray[q];
@@ -62,9 +64,10 @@ int main() {
       outstruct = parse_args(pointer);
       outstruct.lastToken--;
 
-      //get locations of < and > in the output char** array
+      //get locations of <, >, | in the output char** array
       int less_num = -1;
       int more_num = -1;
+      int pipe_num = -1;
       for (int counter = 0; counter < outstruct.lastToken; counter++) {
         if (strcmp(outstruct.output[counter], "<") == 0) {
           //printf("Found a <\n");
@@ -73,6 +76,10 @@ int main() {
         if (strcmp(outstruct.output[counter], ">") == 0) {
           //printf("Found a >\n");
           more_num = counter;
+        }
+        if (strcmp(outstruct.output[counter], "|") == 0) {
+          //printf("Found a >\n");
+          pipe_num = counter;
         }
       }
       //printf("DEBUG: less_num: %i, more_num: %i\n", less_num, more_num);
@@ -96,14 +103,16 @@ int main() {
         //strncat(outstruct.output[more_num], ".txt", 4);
         int fd_new_input = -1;
         int fd_new_output = -1;
-
+        char *redirectionFileName;
         if (less_num != -1) {
           fd_new_input = open(outstruct.output[less_num - 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+          redirectionFileName = outstruct.output[less_num - 1];
           //printf("DEBUG: less_num: %s\n", outstruct.output[less_num]);
           //printf("DEBUG: opening %s file\n", outstruct.output[less_num - 1]);
         }
         if (more_num != -1) {
           fd_new_output = open(outstruct.output[more_num + 1], O_RDWR | O_CREAT | O_TRUNC, 0666);
+          redirectionFileName = outstruct.output[more_num + 1];
           //printf("DEBUG: more_num: %s\n", outstruct.output[more_num]);
           //printf("DEBUG: opening %s file\n", outstruct.output[more_num + 1]);
         }
@@ -145,7 +154,10 @@ int main() {
         run_cmds(outstruct, parentPID);
         dup2(new_fd_stdin, 0);
         dup2(new_fd_stdout, 1);//undoes file table manipulation
-        printf("WISH > Redirection done\n");
+        printf("WISH > Redirection to %s successful\n", redirectionFileName);
+      }
+      else if(pipe_num != -1) {//user inputs pipe |
+
       }
       else {
         run_cmds(outstruct, parentPID);

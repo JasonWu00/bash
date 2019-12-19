@@ -47,7 +47,6 @@ int main() {
       }
       numCommands = q;
     }
-<<<<<<< HEAD
     else if(strchr(input,'|') != NULL) {//check if pipe in input
       char *indcmd1;
       int q = 0;
@@ -59,10 +58,6 @@ int main() {
       pipe_num = 0;
     }
     else {
-=======
-
-    else {//single input command
->>>>>>> 8aff16ef67375e6c57820150f50fc2bed6250d51
       commandArray[0] = inptr;
       numCommands = 1;
     }
@@ -204,7 +199,10 @@ int main() {
         printf("WISH > Redirection to %s successful\n", redirectionFileName);
       }
       else if(pipe_num != -1) {//user inputs pipe |
-        
+        int fd_intermediatary = -1;
+        fd_intermediatary = open("intermediatary", O_RDWR | O_CREAT | O_TRUNC, 0666);
+        int new_fd_stdout = dup(1);
+        int new_fd_stdin = dup(0);
       }
       else {
         run_cmds(outstruct, parentPID);

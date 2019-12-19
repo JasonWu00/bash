@@ -26,6 +26,7 @@ int main() {
 
   while (1) {//as long as "exit" isn't entered
     fgets(input, 100, stdin);
+
     char *position;
     if ((position = strchr(input, '\n')) != NULL) {
       *position = '\0';
@@ -36,15 +37,17 @@ int main() {
     int pipe_num = -1;
     char *inptr = input;//pointer to input string
     char *commandArray[100];
-    if(strchr(input,';') != NULL) {//check if semicolon in input
+
+    if (strchr(input, ';') != NULL) {//check if semicolon in input
       char *indcmd;
       int q = 0;
-      while((indcmd = strsep(&inptr,";")) != NULL) {
+      while((indcmd = strsep(&inptr, ";")) != NULL) {
         commandArray[q] = indcmd;
         q++;
       }
       numCommands = q;
     }
+<<<<<<< HEAD
     else if(strchr(input,'|') != NULL) {//check if pipe in input
       char *indcmd1;
       int q = 0;
@@ -56,9 +59,12 @@ int main() {
       pipe_num = 0;
     }
     else {
+=======
+
+    else {//single input command
+>>>>>>> 8aff16ef67375e6c57820150f50fc2bed6250d51
       commandArray[0] = inptr;
       numCommands = 1;
-
     }
 
     char cd[3] = "cd";
@@ -66,6 +72,8 @@ int main() {
     char lessthan = "<";
     char morethan = ">";
     char pipe = "|";
+
+    int pipe_num = -1;
 
     const char *cd_p = &cd;
     const char *leave_p = &leave;
@@ -104,6 +112,35 @@ int main() {
       else if (strstr(commandArray[q], leave_p) != NULL) {//input command is "exit"
         printf("\nWISH > Exiting shell\nThank you for visiting! Come again soon!\n\n");
         exit(0);
+      }
+
+      else if (strstr(commandArray[q], pipe_p) != NULL) {//check if pipe in input
+
+        int pipe_num = -1;
+        for (int counter = 0; counter < outstruct.lastToken; counter++) {
+          if (strcmp(outstruct.output[counter], ";") == 0) {
+            pipe_num = counter;
+          }
+        }
+
+        char *commandBefore, *commandAfter;
+        commandBefore = outstruct.output[pipe_num - 1];
+        commandAfter = outstruct.output[pipe_num + 1];
+        outstruct.output[pipe_num] = NULL;
+
+        int fd_intermediatary = -1;
+        fd_intermediatary = open("intermediatary", O_RDWR | O_CREAT | O_TRUNC, 0666);
+
+        int new_fd_stdout = dup(1);
+        int new_fd_stdin = dup(0);
+
+        dup2(fd_intermediatary, 1);//replace stdout with intermediatary
+        run_cmds(outstruct, parentPID);//runs first half, output goes into intermediatary
+        dup2(fd_intermediatary, 0);//stdin with inter
+        dup2(new_fd_stdout, 1);//reset stdout
+        outstruct.output[pipe_num - 1] = outstruct.output[pipe_num + 1];
+        run_cmds(outstruct, parentPID);
+        dup2(new_fd_stdin, 0);//reset stdin
       }
 
       else if (less_num != -1 || more_num != -1) {//has a ">" or a "<", conduct redirection

@@ -33,6 +33,7 @@ int main() {
     //gets input and replaces newline with null
 
     int numCommands;
+    int pipe_num = -1;
     char *inptr = input;//pointer to input string
     char *commandArray[100];
     if(strchr(input,';') != NULL) {//check if semicolon in input
@@ -44,15 +45,10 @@ int main() {
       }
       numCommands = q;
     }
-    else {
-      commandArray[0] = inptr;
-      numCommands = 1;
-    }
-    int pipe_num = -1;
-    if(strchr(input,'|') != NULL) {//check if pipe in input
+    else if(strchr(input,'|') != NULL) {//check if pipe in input
       char *indcmd1;
       int q = 0;
-      while((indcmd1 = strsep(&inptr,";")) != NULL) {
+      while((indcmd1 = strsep(&inptr,"|")) != NULL) {
         commandArray[q] = indcmd1;
         q++;
       }
@@ -171,8 +167,7 @@ int main() {
         printf("WISH > Redirection to %s successful\n", redirectionFileName);
       }
       else if(pipe_num != -1) {//user inputs pipe |
-        printf("e0,1: %s, %s\n",commandArray[0], commandArray[1]);
-        return 0;
+        
       }
       else {
         run_cmds(outstruct, parentPID);
